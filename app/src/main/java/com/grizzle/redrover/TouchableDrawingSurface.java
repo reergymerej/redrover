@@ -53,6 +53,7 @@ public class TouchableDrawingSurface extends SurfaceView {
 
     private void createUI() {
         add(new Dude(this, 100, 100));
+        add(new SteeringWheel(100, getHeight() - 100));
     }
 
     private void add(Renderable renderable) {
@@ -116,12 +117,14 @@ public class TouchableDrawingSurface extends SurfaceView {
 
     private void handleTouchDown(MotionEvent motionEvent) {
         for (Touchable touchable : touchables) {
-            if ((currentlyTouching != null && currentlyTouching != touchable) || touchable.isTouching(motionEvent)) {
+
+            if (currentlyTouching == null && touchable.isTouching(motionEvent)) {
                 touchable.onTouchDown(motionEvent);
+
+                System.out.println("touching " + touchable.getClass());
                 currentlyTouching = touchable;
             }
         }
-
     }
 
     private void handleTouchMove(MotionEvent motionEvent) {
@@ -133,6 +136,8 @@ public class TouchableDrawingSurface extends SurfaceView {
     private void handleTouchUp(MotionEvent motionEvent) {
         if (currentlyTouching != null) {
             currentlyTouching.onTouchUp(motionEvent);
+
+            System.out.println("releasing " + currentlyTouching.getClass());
             currentlyTouching = null;
         }
     }
