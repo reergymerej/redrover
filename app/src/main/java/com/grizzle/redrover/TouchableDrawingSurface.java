@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.text.method.Touch;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -15,7 +17,7 @@ public class TouchableDrawingSurface extends SurfaceView {
     private ArrayList<Touchable> touchables = new ArrayList<>();
     private ArrayList<MotionEvent> touchEvents = new ArrayList<>();
     private GameLoopThread gameLoopThread;
-    private Touchable currentlyTouching;
+    private SteeringWheel steeringWheel;
 
     public TouchableDrawingSurface(Context context) {
         super(context);
@@ -53,7 +55,8 @@ public class TouchableDrawingSurface extends SurfaceView {
 
     private void createUI() {
         add(new Dude(this, 100, 100));
-        add(new SteeringWheel(100, getHeight() - 100));
+        steeringWheel = new SteeringWheel(100, getHeight() - 100);
+        add(steeringWheel);
     }
 
     private void add(Renderable renderable) {
@@ -64,7 +67,11 @@ public class TouchableDrawingSurface extends SurfaceView {
     }
 
     private void clearCanvas(Canvas canvas) {
-        canvas.drawColor(Color.BLACK);
+        try {
+            canvas.drawColor(Color.BLACK);
+        } catch (NullPointerException npe) {
+
+        }
     }
 
     public void draw(Canvas canvas) {
@@ -72,8 +79,21 @@ public class TouchableDrawingSurface extends SurfaceView {
 
         handlePendingTouchEvents(canvas);
 
+        update();
+
         for (Renderable renderable : renderables) {
             renderable.draw(canvas);
+        }
+    }
+
+    private void update() {
+//        TODO: interogate steering wheel to get direction, use that to steer moving dude
+        int steeringDirection = this.steeringWheel.getDirection();
+
+        for (Renderable renderable : renderables) {
+            if (renderable instanceof Dude) {
+                ((Dude) renderable).steer(steeringDirection);
+            }
         }
     }
 
@@ -115,30 +135,43 @@ public class TouchableDrawingSurface extends SurfaceView {
         canvas.drawCircle(motionEvent.getX(), motionEvent.getY(), 30f, paint);
     }
 
-    private void handleTouchDown(MotionEvent motionEvent) {
+    private ArrayList<Touchable> getCurrentlyTouching() {
+        ArrayList<Touchable> currentlyTouching = new ArrayList<>();
+
         for (Touchable touchable : touchables) {
+            if (touchable.isBeingTouched()) {
+                currentlyTouching.add(touchable);
+            }
+        }
 
-            if (currentlyTouching == null && touchable.isTouching(motionEvent)) {
+        return currentlyTouching;
+    }
+
+    private void handleTouchDown(MotionEvent motionEvent) {
+        ArrayList<Touchable> currentlyTouching = getCurrentlyTouching();
+
+        for (Touchable touchable : touchables) {
+            if (currentlyTouching.size() == 0 && touchable.isTouching(motionEvent)) {
                 touchable.onTouchDown(motionEvent);
-
                 System.out.println("touching " + touchable.getClass());
-                currentlyTouching = touchable;
             }
         }
     }
 
     private void handleTouchMove(MotionEvent motionEvent) {
-        if (currentlyTouching != null) {
-            currentlyTouching.onTouchMove(motionEvent);
+        ArrayList<Touchable> currentlyTouching = getCurrentlyTouching();
+
+        for (Touchable touchable : currentlyTouching) {
+            touchable.onTouchMove(motionEvent);
         }
     }
 
     private void handleTouchUp(MotionEvent motionEvent) {
-        if (currentlyTouching != null) {
-            currentlyTouching.onTouchUp(motionEvent);
+        ArrayList<Touchable> currentlyTouching = getCurrentlyTouching();
 
-            System.out.println("releasing " + currentlyTouching.getClass());
-            currentlyTouching = null;
+        for (Touchable touchable : currentlyTouching) {
+            touchable.onTouchUp(motionEvent);
+            System.out.println("releasing " + touchable.getClass());
         }
     }
 }

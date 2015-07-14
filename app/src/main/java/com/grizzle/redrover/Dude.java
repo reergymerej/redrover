@@ -23,6 +23,9 @@ public class Dude implements Renderable, Touchable {
 
     private int touchOffsetX;
     private int touchOffsetY;
+    private boolean touching = false;
+    private int ySpeed = 0;
+    private int xSpeed = 0;
 
     public Dude(TouchableDrawingSurface touchableDrawingSurface, int x, int y) {
         this.touchableDrawingSurface = touchableDrawingSurface;
@@ -58,11 +61,15 @@ public class Dude implements Renderable, Touchable {
 
     @Override
     public void update() {
-
+        this.y += this.ySpeed;
+        this.x += this.xSpeed;
+        this.xSpeed = 0;
     }
 
     @Override
     public void draw(Canvas canvas) {
+        update();
+
 //        DEBUG
         showBoundingBox(canvas);
 
@@ -91,6 +98,8 @@ public class Dude implements Renderable, Touchable {
     public void onTouchDown(MotionEvent motionEvent) {
         this.touchOffsetX = (int) motionEvent.getX() - this.x;
         this.touchOffsetY = (int) motionEvent.getY() - this.y;
+        this.touching = true;
+        this.ySpeed = 1;
     }
 
     @Override
@@ -101,6 +110,19 @@ public class Dude implements Renderable, Touchable {
 
     @Override
     public void onTouchUp(MotionEvent motionEvent) {
+        this.touching = false;
+    }
 
+    @Override
+    public boolean isBeingTouched() {
+        return this.touching;
+    }
+
+    public void steer(int direction) {
+        if (this.ySpeed > 0) {
+            if (Math.abs(this.xSpeed) < 5) {
+                this.xSpeed += direction;
+            }
+        }
     }
 }

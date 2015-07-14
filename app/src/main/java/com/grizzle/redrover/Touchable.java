@@ -8,4 +8,5 @@ public interface Touchable {
     public void onTouchDown(MotionEvent motionEvent);
     public void onTouchMove(MotionEvent motionEvent);
     public void onTouchUp(MotionEvent motionEvent);
+    public boolean isBeingTouched();
 }
