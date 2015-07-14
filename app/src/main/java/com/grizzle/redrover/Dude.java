@@ -29,8 +29,16 @@ public class Dude extends DrawableObject implements Touchable {
         double xSpeed = this.getxSpeed() / 1.2;
         double ySpeed = this.getySpeed() / 1.2;
 
-        this.setxSpeed(Math.max((int) xSpeed, 0));
-        this.setySpeed(Math.max((int) ySpeed, 0));
+        if (Math.abs(xSpeed) < 1) {
+            xSpeed = 0;
+        }
+
+        if (Math.abs(ySpeed) < 1) {
+            ySpeed = 0;
+        }
+
+        this.setxSpeed((int) xSpeed);
+        this.setySpeed((int) ySpeed);
     }
 
     private void fling(MotionEvent lastMoveEvent) {
