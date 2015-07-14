@@ -30,6 +30,8 @@ public class DrawableObject {
     private int xSpeed = 0;
     private int ySpeed = 0;
 
+    private boolean constrainToSurfaceView = true;
+
     public DrawableObject(SurfaceView surfaceView, int drawableResource, int x, int y, int scale) {
         this.surfaceView = surfaceView;
         this.x = x;
@@ -74,6 +76,30 @@ public class DrawableObject {
     protected void update() {
         this.y += this.ySpeed;
         this.x += this.xSpeed;
+
+        if (constrainToSurfaceView) {
+            int width = surfaceView.getWidth();
+            int height = surfaceView.getHeight();
+
+            if (y < 0 || y > height) {
+                if (y < 0) {
+                    setY(-y);
+                } else {
+                    setY(height - (y - height));
+                }
+                setySpeed(-getySpeed());
+            }
+
+            if (x < 0 || x > width) {
+
+                if (x < 0) {
+                    setX(-x);
+                } else {
+                    setX(width - (x - width));
+                }
+                setxSpeed(-getySpeed());
+            }
+        }
     }
 
     protected Rect getBoundingBox() {

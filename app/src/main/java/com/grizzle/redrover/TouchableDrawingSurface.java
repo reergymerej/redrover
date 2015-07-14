@@ -10,7 +10,9 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class TouchableDrawingSurface extends SurfaceView {
     private ArrayList<DrawableObject> drawableObjects = new ArrayList<>();
@@ -54,9 +56,28 @@ public class TouchableDrawingSurface extends SurfaceView {
     }
 
     private void createUI() {
-        add(new Dude(this, 100, 100, 1));
+        for (int i = 0; i < 6; i++) {
+            add(dudeFactory(i * 100, 100));
+        }
 //        steeringWheel = new SteeringWheel(100, getHeight() - 100);
 //        add(steeringWheel);
+    }
+
+    private Dude dudeFactory(int x, int y) {
+        int[] DUDES = {
+            R.drawable.dude1,
+            R.drawable.dude2,
+            R.drawable.dude3,
+            R.drawable.dude4,
+            R.drawable.dude5,
+            R.drawable.dude6,
+            R.drawable.dude7
+        };
+
+        Random random = new Random();
+        int index = random.nextInt(DUDES.length);
+
+        return new Dude(this, x, y, random.nextInt(2) + 1, DUDES[index]);
     }
 
     private void add(DrawableObject drawableObject) {
@@ -67,22 +88,20 @@ public class TouchableDrawingSurface extends SurfaceView {
     }
 
     private void clearCanvas(Canvas canvas) {
-        try {
-            canvas.drawColor(Color.BLACK);
-        } catch (NullPointerException npe) {
-
-        }
+        canvas.drawColor(Color.BLACK);
     }
 
     public void draw(Canvas canvas) {
-        clearCanvas(canvas);
+        if (canvas != null) {
+            clearCanvas(canvas);
 
-        handlePendingTouchEvents(canvas);
+            handlePendingTouchEvents(canvas);
 
-        update();
+            update();
 
-        for (DrawableObject drawableObject : drawableObjects) {
-            drawableObject.draw(canvas);
+            for (DrawableObject drawableObject : drawableObjects) {
+                drawableObject.draw(canvas);
+            }
         }
     }
 

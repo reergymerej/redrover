@@ -13,15 +13,32 @@ public class Dude extends DrawableObject implements Touchable {
     private int touchOffsetX;
     private int touchOffsetY;
     private boolean touching = false;
+    private MotionEvent lastMoveEvent;
 
-    public Dude(TouchableDrawingSurface touchableDrawingSurface, int x, int y, int scale) {
-        super(touchableDrawingSurface, R.drawable.dude1, x, y, scale);
+    public Dude(TouchableDrawingSurface touchableDrawingSurface, int x, int y, int scale, int drawableResource) {
+        super(touchableDrawingSurface, drawableResource, x, y, scale);
     }
 
     @Override
     protected void update() {
         super.update();
-        this.setySpeed(0);
+        this.slowDown();
+    }
+
+    private void slowDown() {
+        double xSpeed = this.getxSpeed() / 1.2;
+        double ySpeed = this.getySpeed() / 1.2;
+
+        this.setxSpeed(Math.max((int) xSpeed, 0));
+        this.setySpeed(Math.max((int) ySpeed, 0));
+    }
+
+    private void fling(MotionEvent lastMoveEvent) {
+        int xDist = (int) lastMoveEvent.getX() - this.getX();
+        int yDist = (int) lastMoveEvent.getY() - this.getY();
+
+        this.setxSpeed(xDist);
+        this.setySpeed(yDist);
     }
 
     @Override
@@ -35,18 +52,24 @@ public class Dude extends DrawableObject implements Touchable {
         this.touchOffsetX = (int) motionEvent.getX() - this.getX();
         this.touchOffsetY = (int) motionEvent.getY() - this.getY();
         this.touching = true;
-        setySpeed(1);
+//        setySpeed(1);
     }
 
     @Override
     public void onTouchMove(MotionEvent motionEvent) {
-        this.setX((int) motionEvent.getX() - this.touchOffsetX);
-        this.setY((int) motionEvent.getY() - this.touchOffsetY);
+//        this.setX((int) motionEvent.getX() - this.touchOffsetX);
+//        this.setY((int) motionEvent.getY() - this.touchOffsetY);
+        lastMoveEvent = motionEvent;
     }
 
     @Override
     public void onTouchUp(MotionEvent motionEvent) {
+        if (lastMoveEvent != null) {
+            fling(lastMoveEvent);
+        }
+
         this.touching = false;
+        lastMoveEvent = null;
     }
 
     @Override
