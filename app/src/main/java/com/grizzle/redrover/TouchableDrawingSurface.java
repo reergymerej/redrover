@@ -13,7 +13,7 @@ import android.view.SurfaceView;
 import java.util.ArrayList;
 
 public class TouchableDrawingSurface extends SurfaceView {
-    private ArrayList<Renderable> renderables = new ArrayList<>();
+    private ArrayList<DrawableObject> drawableObjects = new ArrayList<>();
     private ArrayList<Touchable> touchables = new ArrayList<>();
     private ArrayList<MotionEvent> touchEvents = new ArrayList<>();
     private GameLoopThread gameLoopThread;
@@ -54,15 +54,15 @@ public class TouchableDrawingSurface extends SurfaceView {
     }
 
     private void createUI() {
-        add(new Dude(this, 100, 100));
-        steeringWheel = new SteeringWheel(100, getHeight() - 100);
-        add(steeringWheel);
+        add(new Dude(this, 100, 100, 1));
+//        steeringWheel = new SteeringWheel(100, getHeight() - 100);
+//        add(steeringWheel);
     }
 
-    private void add(Renderable renderable) {
-        renderables.add(renderable);
-        if (renderable instanceof Touchable) {
-            touchables.add((Touchable) renderable);
+    private void add(DrawableObject drawableObject) {
+        drawableObjects.add(drawableObject);
+        if (drawableObject instanceof Touchable) {
+            touchables.add((Touchable) drawableObject);
         }
     }
 
@@ -81,19 +81,19 @@ public class TouchableDrawingSurface extends SurfaceView {
 
         update();
 
-        for (Renderable renderable : renderables) {
-            renderable.draw(canvas);
+        for (DrawableObject drawableObject : drawableObjects) {
+            drawableObject.draw(canvas);
         }
     }
 
     private void update() {
 //        TODO: interogate steering wheel to get direction, use that to steer moving dude
-        int steeringDirection = this.steeringWheel.getDirection();
+//        int steeringDirection = this.steeringWheel.getDirection();
 
-        for (Renderable renderable : renderables) {
-            if (renderable instanceof Dude) {
-                ((Dude) renderable).steer(steeringDirection);
-            }
+        for (DrawableObject drawableObject : drawableObjects) {
+//            if (drawableObject instanceof Dude) {
+//                ((Dude) drawableObject).steer(steeringDirection);
+//            }
         }
     }
 
