@@ -172,7 +172,7 @@ public class TouchableDrawingSurface extends SurfaceView {
         for (Touchable touchable : touchables) {
             if (currentlyTouching.size() == 0 && touchable.isTouching(motionEvent)) {
                 touchable.onTouchDown(motionEvent);
-                System.out.println("touching " + touchable.getClass());
+//                System.out.println("touching " + touchable.getClass());
             }
         }
     }
@@ -190,7 +190,7 @@ public class TouchableDrawingSurface extends SurfaceView {
 
         for (Touchable touchable : currentlyTouching) {
             touchable.onTouchUp(motionEvent);
-            System.out.println("releasing " + touchable.getClass());
+//            System.out.println("releasing " + touchable.getClass());
         }
     }
 }

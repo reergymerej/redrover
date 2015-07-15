@@ -25,17 +25,15 @@ public class DrawableObject {
     private int height;
 
 //    position & speed
-    private int x;
-    private int y;
-    private int xSpeed = 0;
-    private int ySpeed = 0;
+    private MotionVector location = new MotionVector(0, 0);
+    private MotionVector speed = new MotionVector(0, 0);
 
     private boolean constrainToSurfaceView = true;
 
     public DrawableObject(SurfaceView surfaceView, int drawableResource, int x, int y, int scale) {
         this.surfaceView = surfaceView;
-        this.x = x;
-        this.y = y;
+        this.location(x, y);
+
         this.scale = scale;
         createBitmap(drawableResource);
     }
@@ -74,8 +72,10 @@ public class DrawableObject {
     }
 
     protected void update() {
-        this.y += this.ySpeed;
-        this.x += this.xSpeed;
+        location.add(speed);
+
+        int x = (int) location.x();
+        int y = (int) location.y();
 
         if (constrainToSurfaceView) {
             int width = surfaceView.getWidth();
@@ -83,21 +83,20 @@ public class DrawableObject {
 
             if (y < 0 || y > height) {
                 if (y < 0) {
-                    setY(-y);
+                    location.y(-y);
                 } else {
-                    setY(height - (y - height));
+                    location.y(height - (y - height));
                 }
-                setySpeed(-getySpeed());
+                speed.y( -speed.y() );
             }
 
             if (x < 0 || x > width) {
-
                 if (x < 0) {
-                    setX(-x);
+                    location.x(-x);
                 } else {
-                    setX(width - (x - width));
+                    location.x(width - (x - width));
                 }
-                setxSpeed(-getySpeed());
+                speed.x( -speed.x() );
             }
         }
     }
@@ -105,44 +104,33 @@ public class DrawableObject {
     protected Rect getBoundingBox() {
         int halfWidth = this.width / 2;
         int halfHeight = this.height / 2;
+        MotionVector location = location();
+        int x = (int) location.x();
+        int y = (int) location.y();
 
         return new Rect(
-                this.x - halfWidth,
-                this.y - halfHeight,
-                this.x + halfWidth,
-                this.y + halfHeight
+                x - halfWidth,
+                y - halfHeight,
+                x + halfWidth,
+                y + halfHeight
         );
     }
 
-    protected int getxSpeed() {
-        return this.xSpeed;
+    protected void setSpeed(MotionVector speed) {
+        this.speed = speed;
     }
 
-    protected int getySpeed() {
-        return this.ySpeed;
+    protected MotionVector getSpeed() {
+        return speed;
     }
 
-    protected void setxSpeed(int xSpeed) {
-        this.xSpeed = xSpeed;
+    protected MotionVector location(int x, int y) {
+        MotionVector location = new MotionVector(x, y);
+        this.location = location;
+        return location;
     }
 
-    protected void setySpeed(int ySpeed) {
-        this.ySpeed = ySpeed;
-    }
-
-    protected int getX() {
-        return this.x;
-    }
-
-    protected int getY() {
-        return this.y;
-    }
-
-    protected void setX(int x) {
-        this.x = x;
-    }
-
-    protected void setY(int y) {
-        this.y = y;
+    protected MotionVector location() {
+        return location;
     }
 }

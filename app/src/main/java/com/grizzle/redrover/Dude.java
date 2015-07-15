@@ -8,6 +8,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
+import java.util.Random;
+
 public class Dude extends DrawableObject implements Touchable {
 
     private int touchOffsetX;
@@ -26,8 +28,10 @@ public class Dude extends DrawableObject implements Touchable {
     }
 
     private void slowDown() {
-        double xSpeed = this.getxSpeed() / 1.2;
-        double ySpeed = this.getySpeed() / 1.2;
+        MotionVector speed = this.getSpeed();
+
+        double xSpeed = speed.x() * 0.9;
+        double ySpeed = speed.y() * 0.9;
 
         if (Math.abs(xSpeed) < 1) {
             xSpeed = 0;
@@ -37,16 +41,20 @@ public class Dude extends DrawableObject implements Touchable {
             ySpeed = 0;
         }
 
-        this.setxSpeed((int) xSpeed);
-        this.setySpeed((int) ySpeed);
+        speed.x(xSpeed).y(ySpeed);
     }
 
-    private void fling(MotionEvent lastMoveEvent) {
-        int xDist = (int) lastMoveEvent.getX() - this.getX();
-        int yDist = (int) lastMoveEvent.getY() - this.getY();
+//    private void fling(MotionEvent lastMoveEvent) {
+//        int xDist = (int) lastMoveEvent.getX() - this.getX();
+//        int yDist = (int) lastMoveEvent.getY() - this.getY();
+//
+//        this.setxSpeed(xDist);
+//        this.setySpeed(yDist);
+//    }
 
-        this.setxSpeed(xDist);
-        this.setySpeed(yDist);
+    private void startMoving() {
+        Random random = new Random();
+        setSpeed(new MotionVector(random.nextInt(100) - 50, random.nextInt(100) - 50));
     }
 
     @Override
@@ -57,27 +65,27 @@ public class Dude extends DrawableObject implements Touchable {
 
     @Override
     public void onTouchDown(MotionEvent motionEvent) {
-        this.touchOffsetX = (int) motionEvent.getX() - this.getX();
-        this.touchOffsetY = (int) motionEvent.getY() - this.getY();
+        this.touchOffsetX = (int) (motionEvent.getX() - location().x());
+        this.touchOffsetY = (int) (motionEvent.getY() - location().x());
         this.touching = true;
-//        setySpeed(1);
+        this.startMoving();
     }
 
     @Override
     public void onTouchMove(MotionEvent motionEvent) {
-//        this.setX((int) motionEvent.getX() - this.touchOffsetX);
-//        this.setY((int) motionEvent.getY() - this.touchOffsetY);
-        lastMoveEvent = motionEvent;
+//        this.setX((int) motionEvent.get_x() - this.touchOffsetX);
+//        this.setY((int) motionEvent.get_y() - this.touchOffsetY);
+//        lastMoveEvent = motionEvent;
     }
 
     @Override
     public void onTouchUp(MotionEvent motionEvent) {
-        if (lastMoveEvent != null) {
-            fling(lastMoveEvent);
-        }
+//        if (lastMoveEvent != null) {
+//            fling(lastMoveEvent);
+//        }
 
         this.touching = false;
-        lastMoveEvent = null;
+//        lastMoveEvent = null;
     }
 
     @Override
@@ -85,14 +93,14 @@ public class Dude extends DrawableObject implements Touchable {
         return this.touching;
     }
 
-    public void steer(int direction) {
-        int ySpeed = this.getySpeed();
-        int xSpeed = this.getxSpeed();
-
-        if (ySpeed > 0) {
-            if (Math.abs(xSpeed) < 5) {
-                this.setxSpeed(xSpeed + direction);
-            }
-        }
-    }
+//    public void steer(int direction) {
+//        int ySpeed = this.getySpeed();
+//        int xSpeed = this.getxSpeed();
+//
+//        if (ySpeed > 0) {
+//            if (Math.abs(xSpeed) < 5) {
+//                this.setxSpeed(xSpeed + direction);
+//            }
+//        }
+//    }
 }
