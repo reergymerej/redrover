@@ -25,18 +25,15 @@ public class Dude extends DrawableObject implements Touchable {
     private void slowDown() {
         PhysicsVector speed = this.getSpeed();
 
-        double xSpeed = speed.x() * 0.9;
-        double ySpeed = speed.y() * 0.9;
+        speed.multiplyScalar(0.9);
 
-        if (Math.abs(xSpeed) < 1) {
-            xSpeed = 0;
+        if (Math.abs(speed.x()) < 1) {
+            speed.x(0);
         }
 
-        if (Math.abs(ySpeed) < 1) {
-            ySpeed = 0;
+        if (Math.abs(speed.y()) < 1) {
+            speed.y(0);
         }
-
-        speed.x(xSpeed).y(ySpeed);
     }
 
 //    private void fling(MotionEvent lastMoveEvent) {

@@ -16,8 +16,7 @@ public class DrawableObject {
 
 //    bitmap
     private Bitmap bitmap;
-    private int bitmapWidth;
-    private int bitmapHeight;
+
     private Rect drawPortionOfBitmap;
 
     private int scale;
@@ -25,8 +24,8 @@ public class DrawableObject {
     private int height;
 
 //    position & speed
-    private PhysicsVector location = new PhysicsVector(0, 0);
-    private PhysicsVector speed = new PhysicsVector(0, 0);
+    protected PhysicsVector location = new PhysicsVector(0, 0);
+    protected PhysicsVector speed = new PhysicsVector(0, 0);
 
     private boolean constrainToSurfaceView = true;
 
@@ -38,16 +37,18 @@ public class DrawableObject {
         createBitmap(drawableResource);
     }
 
-    private void createBitmap(int drawableResource) {
+    protected void createBitmap(int drawableResource) {
+        int bitmapWidth;
+        int bitmapHeight;
         this.bitmap = BitmapFactory.decodeResource(surfaceView.getResources(), drawableResource);
 
 //        convert sprite into plain image
-        this.bitmapWidth = this.bitmap.getWidth() / 3;
-        this.bitmapHeight = this.bitmap.getHeight() / 4;
-        drawPortionOfBitmap = new Rect(0, 0, this.bitmapWidth, this.bitmapHeight);
+        bitmapWidth = this.bitmap.getWidth() / 3;
+        bitmapHeight = this.bitmap.getHeight() / 4;
+        drawPortionOfBitmap = new Rect(0, 0, bitmapWidth, bitmapHeight);
 
-        this.width = (int) (this.bitmapWidth * scale);
-        this.height = (int) (this.bitmapHeight * scale);
+        this.width = (int) (bitmapWidth * scale);
+        this.height = (int) (bitmapHeight * scale);
     }
 
     private void showBoundingBox(Canvas canvas) {

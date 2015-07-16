@@ -26,13 +26,11 @@ public class PhysicsVector {
     }
 
     protected PhysicsVector x(int x) {
-        x((double) x);
-        return this;
+        return x((double) x);
     }
 
     protected PhysicsVector y(int y) {
-        y((double) y);
-        return this;
+        return y((double) y);
     }
 
     protected PhysicsVector x(double x) {
@@ -49,5 +47,15 @@ public class PhysicsVector {
         _x += physicsVector.x();
         _y += physicsVector.y();
         return this;
+    }
+
+    protected PhysicsVector multiplyScalar(double scalar) {
+        x(x() * scalar);
+        y(y() * scalar);
+        return this;
+    }
+
+    protected PhysicsVector multiplyScalar(int scalar) {
+        return multiplyScalar((double) scalar);
     }
 }

@@ -67,6 +67,7 @@ public class TouchableDrawingSurface extends SurfaceView {
     private void createUI() {
         for (int i = 0; i < 6; i++) {
             add(dudeFactory(i * 100, 100));
+            add(ballFactory(i * 100, 100));
         }
     }
 
@@ -85,6 +86,10 @@ public class TouchableDrawingSurface extends SurfaceView {
         int index = random.nextInt(DUDES.length);
 
         return new Dude(this, x, y, random.nextInt(2) + 1, DUDES[index]);
+    }
+
+    private Ball ballFactory(int x, int y) {
+        return new Ball(this, x, y);
     }
 
     private void add(DrawableObject drawableObject) {
