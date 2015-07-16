@@ -93,6 +93,13 @@ public class TouchableDrawingSurface extends SurfaceView {
         if (canvas != null) {
             clearCanvas(canvas);
 
+//            DEBUG
+            Paint paint = new Paint();
+            paint.setColor(Color.WHITE);
+            paint.setStyle(Paint.Style.FILL_AND_STROKE);
+            paint.setStrokeWidth(1f);
+            canvas.drawRect(0, 0, 50, 50, paint);
+
             handlePendingTouchEvents(canvas);
 
             update();
@@ -124,6 +131,9 @@ public class TouchableDrawingSurface extends SurfaceView {
     private void handlePendingTouchEvents(Canvas canvas) {
 
         for (MotionEvent event : touchEvents) {
+//            TODO: dirty hack to adjust for toolbar offset
+            event.offsetLocation(0, -25);
+
 //            DEBUG
             showTouch(event, canvas);
 
