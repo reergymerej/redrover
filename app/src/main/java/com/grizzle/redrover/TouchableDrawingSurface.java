@@ -19,10 +19,12 @@ public class TouchableDrawingSurface extends SurfaceView {
     private ArrayList<Touchable> touchables = new ArrayList<>();
     private ArrayList<MotionEvent> touchEvents = new ArrayList<>();
     private GameLoopThread gameLoopThread;
-    private SteeringWheel steeringWheel;
+
+    private Paint touchPaint;
 
     public TouchableDrawingSurface(Context context) {
         super(context);
+        createTouchPaint();
         gameLoopThread = new GameLoopThread(this, 30);
 
 //        TODO: move this into its own class
@@ -53,6 +55,13 @@ public class TouchableDrawingSurface extends SurfaceView {
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             }
         });
+    }
+
+    private void createTouchPaint() {
+        touchPaint = new Paint();
+        touchPaint.setColor(Color.CYAN);
+        touchPaint.setStrokeWidth(1f);
+        touchPaint.setStyle(Paint.Style.STROKE);
     }
 
     private void createUI() {
@@ -131,9 +140,6 @@ public class TouchableDrawingSurface extends SurfaceView {
     private void handlePendingTouchEvents(Canvas canvas) {
 
         for (MotionEvent event : touchEvents) {
-//            TODO: dirty hack to adjust for toolbar offset
-            event.offsetLocation(0, -25);
-
 //            DEBUG
             showTouch(event, canvas);
 
@@ -155,11 +161,10 @@ public class TouchableDrawingSurface extends SurfaceView {
     }
 
     private void showTouch(MotionEvent motionEvent, Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setColor(Color.CYAN);
-        paint.setStrokeWidth(1f);
-        paint.setStyle(Paint.Style.STROKE);
-        canvas.drawCircle(motionEvent.getX(), motionEvent.getY(), 30f, paint);
+        if (canvas != null) {
+            canvas.drawCircle(motionEvent.getX(), motionEvent.getY(), 30f, touchPaint);
+            canvas.drawPoint(motionEvent.getX(), motionEvent.getY(), touchPaint);
+        }
     }
 
     private ArrayList<Touchable> getCurrentlyTouching() {
