@@ -59,8 +59,6 @@ public class TouchableDrawingSurface extends SurfaceView {
         for (int i = 0; i < 6; i++) {
             add(dudeFactory(i * 100, 100));
         }
-//        steeringWheel = new SteeringWheel(100, getHeight() - 100);
-//        add(steeringWheel);
     }
 
     private Dude dudeFactory(int x, int y) {

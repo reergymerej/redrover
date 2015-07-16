@@ -3,16 +3,16 @@ package com.grizzle.redrover;
 /**
  * Created by grizzle on 7/14/15.
  */
-public class MotionVector {
+public class PhysicsVector {
     private double _x;
     private double _y;
 
-    public MotionVector(double x, double y) {
+    public PhysicsVector(double x, double y) {
         _x = x;
         _y = y;
     }
 
-    public MotionVector(int x, int y) {
+    public PhysicsVector(int x, int y) {
         _x = (double) x;
         _y = (double) y;
     }
@@ -25,29 +25,29 @@ public class MotionVector {
         return _y;
     }
 
-    protected MotionVector x(int x) {
+    protected PhysicsVector x(int x) {
         x((double) x);
         return this;
     }
 
-    protected MotionVector y(int y) {
+    protected PhysicsVector y(int y) {
         y((double) y);
         return this;
     }
 
-    protected MotionVector x(double x) {
+    protected PhysicsVector x(double x) {
         _x = x;
         return this;
     }
 
-    protected MotionVector y(double y) {
+    protected PhysicsVector y(double y) {
         _y = y;
         return this;
     }
 
-    protected MotionVector add(MotionVector motionVector) {
-        _x += motionVector.x();
-        _y += motionVector.y();
+    protected PhysicsVector add(PhysicsVector physicsVector) {
+        _x += physicsVector.x();
+        _y += physicsVector.y();
         return this;
     }
 }

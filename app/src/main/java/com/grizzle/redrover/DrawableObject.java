@@ -25,8 +25,8 @@ public class DrawableObject {
     private int height;
 
 //    position & speed
-    private MotionVector location = new MotionVector(0, 0);
-    private MotionVector speed = new MotionVector(0, 0);
+    private PhysicsVector location = new PhysicsVector(0, 0);
+    private PhysicsVector speed = new PhysicsVector(0, 0);
 
     private boolean constrainToSurfaceView = true;
 
@@ -104,7 +104,7 @@ public class DrawableObject {
     protected Rect getBoundingBox() {
         int halfWidth = this.width / 2;
         int halfHeight = this.height / 2;
-        MotionVector location = location();
+        PhysicsVector location = location();
         int x = (int) location.x();
         int y = (int) location.y();
 
@@ -116,21 +116,21 @@ public class DrawableObject {
         );
     }
 
-    protected void setSpeed(MotionVector speed) {
+    protected void setSpeed(PhysicsVector speed) {
         this.speed = speed;
     }
 
-    protected MotionVector getSpeed() {
+    protected PhysicsVector getSpeed() {
         return speed;
     }
 
-    protected MotionVector location(int x, int y) {
-        MotionVector location = new MotionVector(x, y);
+    protected PhysicsVector location(int x, int y) {
+        PhysicsVector location = new PhysicsVector(x, y);
         this.location = location;
         return location;
     }
 
-    protected MotionVector location() {
+    protected PhysicsVector location() {
         return location;
     }
 }

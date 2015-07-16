@@ -1,10 +1,5 @@
 package com.grizzle.redrover;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 
@@ -28,7 +23,7 @@ public class Dude extends DrawableObject implements Touchable {
     }
 
     private void slowDown() {
-        MotionVector speed = this.getSpeed();
+        PhysicsVector speed = this.getSpeed();
 
         double xSpeed = speed.x() * 0.9;
         double ySpeed = speed.y() * 0.9;
@@ -54,7 +49,7 @@ public class Dude extends DrawableObject implements Touchable {
 
     private void startMoving() {
         Random random = new Random();
-        setSpeed(new MotionVector(random.nextInt(100) - 50, random.nextInt(100) - 50));
+        setSpeed(new PhysicsVector(random.nextInt(100) - 50, random.nextInt(100) - 50));
     }
 
     @Override
